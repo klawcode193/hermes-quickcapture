@@ -1,2 +1,0 @@
-[console_scripts]
-hermes-quickcapture = hermes_quickcapture.app:main

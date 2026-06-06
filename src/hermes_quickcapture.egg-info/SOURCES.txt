@@ -1,0 +1,13 @@
+LICENSE
+README.md
+pyproject.toml
+src/hermes_quickcapture/__init__.py
+src/hermes_quickcapture/app.py
+src/hermes_quickcapture/core.py
+src/hermes_quickcapture.egg-info/PKG-INFO
+src/hermes_quickcapture.egg-info/SOURCES.txt
+src/hermes_quickcapture.egg-info/dependency_links.txt
+src/hermes_quickcapture.egg-info/entry_points.txt
+src/hermes_quickcapture.egg-info/requires.txt
+src/hermes_quickcapture.egg-info/top_level.txt
+tests/test_core.py

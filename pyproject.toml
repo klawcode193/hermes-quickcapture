@@ -1,0 +1,29 @@
+[project]
+name = "hermes-quickcapture"
+version = "0.1.0"
+description = "Windows tray app for capturing clipboard/text into Obsidian and preparing Hermes Agent actions."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Kevin R" }]
+keywords = ["obsidian", "clipboard", "tray", "hermes-agent", "productivity"]
+dependencies = [
+  "pyperclip>=1.9.0",
+  "pystray>=0.19.5",
+  "pillow>=10.0.0",
+  "keyboard>=0.13.5; platform_system == 'Windows'",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0.0", "pyinstaller>=6.0.0"]
+
+[project.scripts]
+hermes-quickcapture = "hermes_quickcapture.app:main"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

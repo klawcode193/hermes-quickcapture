@@ -12,6 +12,16 @@ from PIL import Image, ImageDraw
 
 from .core import APP_NAME, build_hermes_prompt, load_config, save_capture, save_config
 
+
+def bundled_resource(relative_path: str) -> Path:
+    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+        return Path(sys._MEIPASS) / relative_path
+    return Path(__file__).resolve().parents[2] / relative_path
+
+
+APP_ICON_ICO = bundled_resource("assets/hermes-quickcapture.ico")
+APP_ICON_PNG = bundled_resource("assets/hermes-quickcapture.png")
+
 try:
     import pystray
 except Exception:  # pragma: no cover - exercised manually on Windows
@@ -24,11 +34,11 @@ except Exception:  # pragma: no cover
 
 
 def make_icon_image(size: int = 64) -> Image.Image:
+    if APP_ICON_PNG.exists():
+        return Image.open(APP_ICON_PNG).convert("RGBA").resize((size, size), Image.Resampling.LANCZOS)
     img = Image.new("RGBA", (size, size), (24, 31, 48, 255))
     d = ImageDraw.Draw(img)
     d.rounded_rectangle((8, 8, size - 8, size - 8), radius=14, fill=(37, 99, 235, 255))
-    d.rectangle((18, 18, size - 18, size - 14), fill=(255, 255, 255, 245))
-    d.polygon([(22, 25), (size - 22, 25), (size // 2 + 5, 39), (size // 2 + 5, 48), (size // 2 - 5, 52), (size // 2 - 5, 39)], fill=(37, 99, 235, 255))
     return img
 
 
@@ -43,6 +53,7 @@ class QuickCaptureWindow:
         self.root = tk.Tk()
         self.root.title(APP_NAME)
         self.root.geometry("680x460")
+        self._set_window_icon()
         self.root.attributes("-topmost", True)
         self.root.after(250, lambda: self.root.attributes("-topmost", False))
         self.status = tk.StringVar(value=f"Inbox: {self.config.inbox_path}")
@@ -71,6 +82,16 @@ class QuickCaptureWindow:
         self.paste_clipboard()
         self.root.bind("<Control-Return>", lambda _e: self.save_text())
         self.root.bind("<Escape>", lambda _e: self.root.destroy())
+
+    def _set_window_icon(self) -> None:
+        try:
+            if APP_ICON_ICO.exists():
+                self.root.iconbitmap(default=str(APP_ICON_ICO))
+            if APP_ICON_PNG.exists():
+                self._icon_photo = self.tk.PhotoImage(file=str(APP_ICON_PNG))
+                self.root.iconphoto(True, self._icon_photo)
+        except Exception:
+            pass
 
     def paste_clipboard(self):
         data = pyperclip.paste() or ""

@@ -40,7 +40,7 @@ python -m hermes_quickcapture.app
 ## Build Windows exe
 
 ```bash
-python -m PyInstaller --noconsole --onefile --name HermesQuickCapture --paths src src/hermes_quickcapture/app.py
+python -m PyInstaller --noconsole --onefile --name HermesQuickCapture --icon assets/hermes-quickcapture.ico --add-data "assets/hermes-quickcapture.ico;assets" --add-data "assets/hermes-quickcapture.png;assets" --paths src launcher.py
 ```
 
 The executable will be created at:
